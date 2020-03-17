@@ -1,102 +1,59 @@
 /*
 Червинский Артём Алексеевич ИВТ-13БО
 Лабораторная работа №1. Одномерные массивы. 1.3 а, 2-2.
-Программа находит путь, который необходимо пройти хромому королю по заданному полю.
+Программа находит путь, который необходимо пройти хромому королю 
+по заданному полю.
 Ввод: начальная и конечная позиция двумя координатами поля.
 Вывод: последовательность чисел, задающая путь.
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <locale.h>
-#define MAX_SIZE 1000
+#include "field.h"
+#define MAX_SIZE 10000
 
-int main() {
+int main() 
+{
 	setlocale(LC_ALL, "RUS");
 
-	int Path[MAX_SIZE];
+	int path[MAX_SIZE];
 	int n, m;
 	int i = 0;
-	int start_r, start_c, fnsh_r, fnsh_c, pos_r, pos_c;
+	int start_row, start_col, end_row, end_col;
+	int input;
 	printf ("Программа находит путь, который необходимо пройти хромому королю по заданному полю.\n");
-	printf ("Введите количество рядов в поле\n");
-	if (scanf ("%d", &m) == 0)
-	{
-		printf ("\nНекорректный ввод\n");
-		system("pause");
-		return 1;
-	}
-	printf ("Введите количество стобцов в поле\n");
-	if (scanf ("%d", &n) == 0)
-	{
-		printf ("\nНекорректный ввод\n");
-		system("pause");
-		return 1;
-	}
 	
-	if (n < 1 || m < 1)
-	{
-		printf ("Размеры поля должны быть положительными\n");
-		system("pause");
-		return 1;
-	}
-
-	printf ("Введите начальную и конечную позиции в координатах строка-столбец (начиная с 1):\n");
-	if (scanf ("%d%d%d%d", &start_r, &start_c, &fnsh_r, &fnsh_c) != 4)
+	if ((input = Read_Field_Size (&n, &m)) == 1)
 	{
 		printf ("Некорректный ввод\n");
 		system("pause");
 		return 1;
 	}
-	if (start_r < 1 || start_c < 1 || fnsh_r < 1 || fnsh_c < 1 ||
-		start_r > m || start_c > n || fnsh_r > m || fnsh_c > n)
+	else if (input == 2)
+	{
+		printf ("Размеры поля должны быть положительными\n");
+		system("pause");
+		return 2;
+	}
+
+	if ((input = Read_Field_Pos (n, m, &start_row, &start_col, &end_row, &end_col)) == 1)
+	{
+		printf ("Некорректный ввод\n");
+		system("pause");
+		return 1;
+	}
+	else if (input == 2)
 	{
 		printf ("Заданные координаты выходят за границы поля\n");
 		system("pause");
 		return 2;
 	}
-
-	Path[0] = (start_r-1) * n + start_c;
-	i++;
-	//В цикле идем по полю в направлении финиша (клетки назначения)
-	pos_r = start_r;
-	pos_c = start_c;
-	while (pos_c != fnsh_c || pos_r != fnsh_r)
-	{
-		if (pos_r == fnsh_r) //Если король на ряду с финишем
-		{
-			if (pos_c > fnsh_c)
-			{
-				pos_c--;
-			}
-			else
-			{
-				pos_c++;
-			}
-		}
-		if (pos_r > fnsh_r) //Если король ниже финиша
-		{			
-			if (pos_c > fnsh_c) 
-			{
-				pos_c--;				
-			}
-			pos_r--;			
-		}
-		if (pos_r < fnsh_r) //Если король выше финиша
-		{
-			if (pos_c < fnsh_c)
-			{
-				pos_c++;
-			}
-			pos_r++;			
-		}
-
-		Path[i] = (pos_r - 1) * n + pos_c;
-		i++;
-	} 
 	
+	Get_Path (n, m, start_row, start_col, end_row, end_col, path, &i);
+
 	for (int j = 0; j < i; j++)
 	{
-		printf ("%d ", Path[j]);
+		printf ("%d ", path[j]);
 	}
 	
 	printf ("\n");
