@@ -18,43 +18,40 @@ int main()
 
 	int path[MAX_SIZE];
 	int n, m;
-	int i = 0;
-	int start_row, start_col, end_row, end_col;
 	int input;
+	int len = 0;
+	int start_row, start_col, end_row, end_col;
+
 	printf ("Программа находит путь, который необходимо пройти хромому королю по заданному полю.\n");
 	
-	if ((input = Read_Field_Size (&n, &m)) == 1)
+	if ((input = Read_field_size (&n, &m)) == ER_WRONG_INP)
 	{
 		printf ("Некорректный ввод\n");
 		system("pause");
-		return 1;
+		return 0;
 	}
-	else if (input == 2)
+	else if (input == ER_INCORRECT_INP)
 	{
 		printf ("Размеры поля должны быть положительными\n");
 		system("pause");
-		return 2;
+		return 0;
 	}
 
-	if ((input = Read_Field_Pos (n, m, &start_row, &start_col, &end_row, &end_col)) == 1)
+	if ((input = Read_field_pos (n, m, &start_row, &start_col, &end_row, &end_col)) == ER_WRONG_INP)
 	{
 		printf ("Некорректный ввод\n");
 		system("pause");
-		return 1;
+		return 0;
 	}
-	else if (input == 2)
+	else if (input == ER_INCORRECT_INP)
 	{
 		printf ("Заданные координаты выходят за границы поля\n");
 		system("pause");
-		return 2;
+		return 0;
 	}
 	
-	Get_Path (n, m, start_row, start_col, end_row, end_col, path, &i);
-
-	for (int j = 0; j < i; j++)
-	{
-		printf ("%d ", path[j]);
-	}
+	Get_path (n, m, start_row, start_col, end_row, end_col, path, &len);
+	Print_path (path, len);	
 	
 	printf ("\n");
 	system("pause");
@@ -85,4 +82,6 @@ int main()
 10 10
 7 5 10 1
 =65 75 85 95 94 93 92 91
+
+
 */
